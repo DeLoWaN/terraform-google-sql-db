@@ -48,6 +48,18 @@ fetch workflows.googleapis.com/Workflow
 | condition val() > 0 '1'
 ```
 
+## Caveats
+
+You may encounter that following error:
+
+```text
+Error: Error creating Job: googleapi: Error 403: The principal (user or service account) lacks IAM permission "cloudscheduler.jobs.create"
+```
+
+Although it may indicate what the error message is really saying, it can also mean that the Cloud Scheduler is not supported in the current region. To check if the region is supported, use the `gcloud scheduler locations list` command.
+
+In the event the region is not supported, you can pass the parameter `disable_cloud_scheduler: true` to disable the creation of Scheduler jobs. You will then have to trigger the workflows with an external process.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
@@ -63,6 +75,7 @@ fetch workflows.googleapis.com/Workflow
 | deletion\_protection | Whether Terraform will be prevented from destroying the workflow. | `bool` | `true` | no |
 | enable\_backup\_monitoring | Whether to monitor backup workflows or not | `bool` | `false` | no |
 | enable\_connector\_params | Whether to enable connector-specific parameters for Google Workflow SQL Export. | `bool` | `false` | no |
+| disable\_cloud\_scheduler | Wether to disable Cloud Scheduler with this module. Usefull when regions does not support Cloud Scheduler. The worflows will have to be triggered manually. | `bool` | `false` | no |
 | enable\_export\_backup | Weather to create exports to GCS Buckets with this module | `bool` | `true` | no |
 | enable\_export\_monitoring | Whether to monitor export workflows or not | `bool` | `false` | no |
 | enable\_internal\_backup | Wether to create internal backups with this module | `bool` | `true` | no |
